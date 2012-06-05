@@ -1,0 +1,74 @@
+<html>
+<head><title>olsner's really short C quiz</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+//<!--
+function allbuttons(f) {
+	row = 2
+	while (row) {
+		col = 2
+		while (col) {
+			f(row, col, '#'+row+'_'+col);
+			col--
+		}
+		row--
+	}
+}
+
+$(function() {
+	allbuttons(function(row,col,id) {
+		$(id).append('<input type="radio" name="'+row+'" value="'+col+'">')
+	});
+	$('#correct').click(function() {
+		correct = 0
+		allbuttons(function(row,col,id) {
+			var val = $('input:radio[name="'+row+'"]:checked').val();
+			$(id).removeClass('right wrong')
+			if (val == col)
+			{
+				$(id).addClass(col == row ? 'right' : 'wrong')
+				correct += (col == row ? 1 : 0)
+			}
+		});
+		var res = '';
+		switch (correct) {
+		case 0:
+		case 1:
+			res = "You seem to be mistaken on one or two things.";
+			break;
+		case 2:
+			res = "Congratulations! Your knowledge of C is complete and infallible.";
+			break;
+		}
+		$('#result').text(res);
+		$('#result').addClass('done');
+		if (correct != 2)
+			$('#result').addClass('wrong');
+		else
+			$('#result').removeClass('wrong');
+	});
+});
+//-->
+</script>
+<style type="text/css">
+.right { background-color: green; }
+.wrong { background-color: red; }
+.done { border: solid 1px black; background-color: #aaffaa; margin: 2em; padding: 2em; }
+.done.wrong { background-color: #ffaaaa; }
+</style>
+</head>
+<body>
+<h2>Really short C quiz</h2>
+<p>Everything you will ever need to know about C in one small quiz.<p>
+<form>
+<table>
+<tr><td></td><td><b>1</b></td><td>undefined</td></tr>
+<tr><td>sizeof(char)</td><td id="1_1"></td><td id="1_2"></td></tr>
+<tr><td>Everything else</td><td id="2_1"></td><td id="2_2"></td></tr>
+<tr><td colspan=3>&nbsp;</td></tr>
+<tr><td colspan=3 align=right><input type=button id="correct" value="Check answers"></td></tr>
+</table>
+</form>
+<div id="result"></div>
+</body>
+</html>
